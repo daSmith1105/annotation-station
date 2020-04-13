@@ -1,0 +1,25 @@
+.annotator {
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+}
+
+button {
+  background-color: white;
+  color: black;
+  transition: .5s;
+  font-size: .8em;
+  padding: 5px; 
+  border-radius: 5px;
+  border: 2px solid grey;
+
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: goldenrod;
+  color: white;
+  border: 2px solid goldenrod;
+  padding: 5px; 
+  border-radius: 5px;
+}
