@@ -2,6 +2,8 @@ import React from 'react';
 import Annotation from 'react-image-annotation';
 import '../App.css';
 
+import image from '../153640_027.jpg'
+
 export default class Simple extends React.Component {
     state = {
       annotations: [],
@@ -100,13 +102,14 @@ export default class Simple extends React.Component {
         // w = annotations[index].geometry.width
         // text = annotations[index].data.text
 
+        console.log(image.height, image.width)
+
       return (
           <div style={{ display: 'flex', maxWidth: '90%', height: 600, position: 'relative', marginLeft: '4em' }}>
             <Annotation
                 className="annotator"
-                src={"https://source.unsplash.com/random/800x600"}
+                src={image}
                 alt='Test'
-                style={{ height: 'auto' }}
                 annotations={this.state.annotations}
                 // type={this.state.type}
                 // disableSelector={true}
