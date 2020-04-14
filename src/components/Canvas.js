@@ -1,5 +1,6 @@
 import React from 'react';
 import Sidebar from './Sidebar';
+import '../App.css';
 
 class Canvas extends React.Component {
 
@@ -223,7 +224,8 @@ class Canvas extends React.Component {
       return(
         <div style={{ display: 'flex', position: 'relative'}}>
             <div style={{ position: 'relative'}}>
-                <canvas ref="canvas" 
+                <canvas className="no-highlight"
+                        ref="canvas" 
                         onMouseDown={this._onMouseDown} 
                         onMouseUp={this._onMouseUp}
                         onMouseMove={this._onMouseMove} />
