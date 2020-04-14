@@ -1,24 +1,15 @@
 import React from 'react';
 import './App.css';
-import Annotator from './components/Annotator';
-import FileSelector from './components/FileSelector';
-import TestAnnotation from './components/TestAnnotation';
+import Canvas from './components/Canvas';
+import testImg from './153640_027.jpg';
 
 class App extends React.Component {
 
-  state={
-    currentImage: ''
-  }
-
-  setCurrentImage = (image) => {
-    // alert(image)
-    this.setState({ currentImage: image })
-  }
-
   render() {
+
     return (
-      <div>
-       <TestAnnotation /> 
+      <div style={{ display: 'flex' }}>
+       <Canvas image={testImg} /> 
       </div>
     );
   }
