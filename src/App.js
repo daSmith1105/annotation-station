@@ -4,6 +4,30 @@ import Canvas from './components/Canvas';
 import testImg from './153640_027.jpg';
 import './App.css';
 
+const testJson = {
+  "filename": "cs1184/cam02/2020/03/02/153640_027.jpg",
+  "width":853,
+  "height":480,
+  "exclude":0,
+  "bboxes":[
+      {
+          "class":"person",
+          "x":230,
+          "y":71,
+          "w":50,
+          "h":105
+      },
+      {
+          "class": "vehicle",
+          "x":336,
+          "y":33,
+          "w":191,
+          "h":144
+      }
+  ]
+};
+
+
 class App extends React.Component {
   state = {
     apiUrl: 'https://monarch-backend.dividia.net/',
@@ -13,8 +37,8 @@ class App extends React.Component {
   }
 
   componentDidMount = () => {
-    console.log('mounted')
-    
+    this.getNewImage();
+    this.saveJsonData(testJson);
   }
 
   validateAnnotator = () => {
@@ -28,11 +52,46 @@ class App extends React.Component {
   }
 
   getNewImage = () => {
-    // make the call to the backend to get a new .jpg image 
+    fetch( this.state.apiUrl + 'api/getimage', {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then( res => {
+      if(!res.ok) {
+        throw new Error('Bad Response')
+      }
+      return res.json()
+    })
+    .then( data => {
+      console.log(data)
+    })
+    .catch( error => {
+      console.log(error)
+    })
   }
 
-  saveJsonData = () => {
-    // take json annotation data and push to the backend to place in the proper directory
+  saveJsonData = (data) => {
+    fetch( this.state.apiUrl + 'api/savejsondata', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then( res => {
+      if(!res.ok) {
+        throw new Error('Bad Response')
+      }
+      return res.json()
+    })
+    .then( data => {
+      console.log(data)
+    })
+    .catch( error => {
+      console.log(error)
+    })
   }
 
   render() {
