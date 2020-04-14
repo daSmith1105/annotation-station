@@ -25,10 +25,18 @@ class Canvas extends React.Component {
       const img = this.refs.image;
       img.onload = () => {
         this.setState({ imageHeight: img.height, imageWidth: img.width });
-        ctx.canvas.width = img.width;
-        ctx.canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
+        ctx.canvas.width = img.width + 20 ;
+        ctx.canvas.height = img.height + 20;
+        this.drawImage( 0, 0, img.width, img.height );
       };
+    }
+
+    // s = source, d = destination
+    drawImage = ( x, y, w, h ) => {
+        const canvas = this.refs.canvas;
+        const img = this.refs.image;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage( img, x, y, w, h );
     }
 
     randomColor = () => {
@@ -106,10 +114,10 @@ class Canvas extends React.Component {
     }
 
     displayResults = () => {
-        if(this.state.annotations.length > 0) {
+        if(this.state.annotations.length > 0 || this.state.excluded === 1 ) {
             const resultObj = { 
                 filename: "whatever",
-                annotated_by: 'David',
+                annotated_by: this.props.annotatorName.toLowerCase(),
                 width: this.state.imageWidth,
                 height: this.state.imageHeight,
                 exclude: this.state.excluded,
@@ -126,18 +134,11 @@ class Canvas extends React.Component {
             alert(JSON.stringify(resultObj) )
            
             this.setState({ 
-                imageHeight: 0,
-                imageWidth: 0,
-                startX: 0,
-                startY: 0,
-                endX: 0,
-                endY: 0,
                 mouseDown: false,
                 showClassSelection: false,
                 showExclusionModal: false,
                 annotation: {},
                 annotations: [],
-                exclusionText: '',
                 excluded: 0
             }, () => this.redrawAnnotations() )
         } else {
@@ -159,12 +160,11 @@ class Canvas extends React.Component {
     removeLastAnnotation = () => {
         if( this.state.annotations.length ) {
             const canvas = this.refs.canvas;
-            const img = this.refs.image;
             const ctx = canvas.getContext("2d");
             let annotations = [...this.state.annotations];
             const t = annotations.pop();
             ctx.clearRect(t.x,t.y,t.w,t.h);
-            ctx.drawImage(img, 0, 0);
+            this.drawImage( 0, 0, this.state.imageWidth, this.state.imageHeight )
             this.setState({ annotations: annotations }, () => this.state.annotations.forEach( a => this.drawRect(a.x, a.y, a.w, a.h, a.class)) );
         } else {
             alert('Nothing to undo.')
@@ -173,16 +173,10 @@ class Canvas extends React.Component {
 
     redrawAnnotations = () => {
         if( this.state.annotations.length ) {
-            const canvas = this.refs.canvas;
-            const img = this.refs.image;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0);
+            this.drawImage( 0, 0, this.state.imageWidth, this.state.imageHeight )
             this.state.annotations.forEach( a => this.drawRect(a.x, a.y, a.w, a.h, a.class, a.color))
         } else {
-            const canvas = this.refs.canvas;
-            const img = this.refs.image;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0);
+            this.drawImage( 0, 0, this.state.imageWidth, this.state.imageHeight )
         }
     }
 
@@ -222,8 +216,8 @@ class Canvas extends React.Component {
 
     render() {
       return(
-        <div style={{ display: 'flex', position: 'relative'}}>
-            <div style={{ position: 'relative'}}>
+        <div style={{ display: 'flex' }}>
+            <div style={{ position: 'relative', backgroundColor: 'blue', width: this.state.imageWidth, height: this.state.imageHeight }}>
                 <canvas className="no-highlight"
                         ref="canvas" 
                         onMouseDown={this._onMouseDown} 
@@ -240,15 +234,18 @@ class Canvas extends React.Component {
                         null
                     }
             </div>
-            <div style={{ padding: 20 }}>
-            <Sidebar annotations={ this.state.annotations } 
-                     displayResults={ this.displayResults }
-                     removeLastAnnotation={ this.removeLastAnnotation }
-                     excludeImage={ this.excludeImage }
-                     changeAnnotationObjectClass={ this.changeAnnotationObjectClass }
-                     removeAnnotationObject={ this.removeAnnotationObject }
-                     clearAll={ this.clearAll } />
+            <div style={{ textAlign: 'left' }}>
+                <Sidebar annotations={ this.state.annotations } 
+                         displayResults={ this.displayResults }
+                         removeLastAnnotation={ this.removeLastAnnotation }
+                         excludeImage={ this.excludeImage }
+                         changeAnnotationObjectClass={ this.changeAnnotationObjectClass }
+                         removeAnnotationObject={ this.removeAnnotationObject }
+                         clearAll={ this.clearAll }
+                         annotatorName={ this.props.annotatorName }
+                         editAnotatorName={ this.props.editAnotatorName } />
             </div>
+
         </div>
       )
     }

@@ -29,7 +29,7 @@ class AnnotationObject extends React.Component {
         const { x, y, w, h } = this.props.annotation;
 
         return (
-            <div style={{ position: 'relative', paddingBottom: 5, border: `2px solid ${this.state.borderColor}`, borderRadius: 5, margin: 10 }}>
+            <div className="box-shadow" style={{ position: 'relative', paddingBottom: 5, border: `2px solid ${this.state.borderColor}`, borderRadius: 5, margin: 10 }}>
                 <div style={{ display: 'flex',  padding: 5, backgroundColor: this.props.annotation.color }}>
                     <select style={{ float: 'left', width: 100 }} 
                             value={ this.state.selectedClass } 
