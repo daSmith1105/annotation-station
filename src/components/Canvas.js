@@ -76,11 +76,11 @@ class Canvas extends React.Component {
 
         const canvas = this.refs.canvas;
         canvas.style.cursor="crosshair";
-        this.setState({ startX: e.clientX, startY: e.clientY, borderColor: this.randomColor() });
+        this.setState({ isDrawing: true, startX: e.clientX, startY: e.clientY, borderColor: this.randomColor() });
     }
 
     _onMouseUp = (e) => {
-        if (e.clientX - this.state.startX > 5 && e.clientY - this.state.startY > 5 ) {
+        if (e.clientX - this.state.startX > 10 && e.clientY - this.state.startY > 10 ) {
             const c = this.state.borderColor
             this.drawRect(this.state.startX, this.state.startY, e.clientX - this.state.startX, e.clientY - this.state.startY,null, c);
             this.setState({ 
@@ -93,6 +93,7 @@ class Canvas extends React.Component {
             })
         } else {
             this.clearCurrentAnnotation();
+            this.setState({ isDrawing: false })
         }
     }
 
@@ -100,7 +101,7 @@ class Canvas extends React.Component {
         if( this.state.isDrawing ) {
             this.clearCurrentAnnotation();
             this.drawRect(this.state.startX, this.state.startY, e.clientX - this.state.startX, e.clientY - this.state.startY);
-        } 
+        }
     }
 
     displayResults = () => {
@@ -237,7 +238,7 @@ class Canvas extends React.Component {
                         null
                     }
             </div>
-            <div style={{ paddingRight: 20, paddingLeft: 20 }}>
+            <div style={{ padding: 20 }}>
             <Sidebar annotations={ this.state.annotations } 
                      displayResults={ this.displayResults }
                      removeLastAnnotation={ this.removeLastAnnotation }
