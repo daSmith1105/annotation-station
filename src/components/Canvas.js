@@ -74,9 +74,6 @@ class Canvas extends React.Component {
         // clear the current annotation and start a new one
         this.clearCurrentAnnotation();
         } 
-
-        const canvas = this.refs.canvas;
-        canvas.style.cursor="crosshair";
         this.setState({ isDrawing: true, startX: e.clientX, startY: e.clientY, borderColor: this.randomColor() });
     }
 
